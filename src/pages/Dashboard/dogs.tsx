@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Grid, Paper, TableContainer, Table, TableCell, TableRow, TableHead, TableBody, IconButton, Typography, LinearProgress, Tooltip, TextField, FormControl, InputLabel, Select } from '@material-ui/core';
+import { useContext, useState } from 'react';
+import { Grid, Paper, TableContainer, Table, TableCell, TableRow, TableHead, TableBody, IconButton, LinearProgress, Tooltip } from '@material-ui/core';
 import Backend from '../../common/backend';
 import Modal from '../../components/Modal';
 import DogsSearch from './dogsSearch';
@@ -10,7 +10,6 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ImageIcon from '@material-ui/icons/Image';
 import { DogLite, GetImageResponse } from '../../common/types/dogs';
 import { DashboardContext, DashboardContextType } from '../../common/context/dashboardContext';
-import { UserBookmarks } from '../../common/types/bookmarks';
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -55,7 +54,7 @@ export const Dogs = (props: DogsProps) => {
         return Backend.get<GetImageResponse>('images/' + imageId)
             .then(r => {
                 console.log(r)
-                if (r?.status == 400) {
+                if (r?.status === 400) {
                     setImageDocumentError(true)
                     setImage(null)
                 }
@@ -95,21 +94,28 @@ export const Dogs = (props: DogsProps) => {
                                         {
                                             dogsResult?.slice(0,30).map(dog => (
                                                 <TableRow key={dog.id}>
-                                                    <TableCell align="left"><IconButton onClick={() => {
-                                                        //if bookmark already exists, do not add it, remove it instead
-                                                        if (dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id)) {
-                                                            dContext.removeBookmark({ dogId: dog.id, name: dog.name });
-                                                        } else {
-                                                            dContext.addBookmark({ dogId: dog.id, name: dog.name });
-                                                        }
-                                                    }
-                                                    }>
-                                                        {
-                                                            dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id)
-                                                                ? <Tooltip enterDelay={150} title='Remove Bookmark'><BookmarkIcon /></Tooltip>
-                                                                : <Tooltip enterDelay={500} title='Add to bookmarks'><BookmarkBorderIcon /></Tooltip>
-                                                        }
-                                                    </IconButton>
+                                                    <TableCell align="left">
+                                                        <Tooltip 
+                                                        enterDelay={dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id) ? 150 : 500} 
+                                                        title={dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id) ? 'Remove Bookmark' : 'Add to bookmarks'}
+                                                        >
+                                                        {/* <Tooltip enterDelay={150} title='Remove Bookmark'> */}
+                                                            <IconButton onClick={() => {
+                                                                //if bookmark already exists, do not add it, remove it instead
+                                                                if (dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id)) {
+                                                                    dContext.removeBookmark({ dogId: dog.id, name: dog.name });
+                                                                } else {
+                                                                    dContext.addBookmark({ dogId: dog.id, name: dog.name });
+                                                                }
+                                                            }
+                                                            }>
+                                                                {
+                                                                    dContext.userBookmarks?.bookmarks.find(bm => bm.dogId === dog.id)
+                                                                        ? <BookmarkIcon />
+                                                                        : <BookmarkBorderIcon />
+                                                                }
+                                                            </IconButton>
+                                                        </Tooltip>
                                                         {dog.name}
                                                     </TableCell>
                                                     <TableCell align="right">{dog.height.imperial}in</TableCell>
@@ -138,7 +144,7 @@ export const Dogs = (props: DogsProps) => {
         >
             {
                 image
-                    ? <img src={image?.url} style={{ width: 500 }} />
+                    ? <img src={image?.url} style={{ width: 500 }} alt="dog" />
                     : imageError ? <Alert severity="error">Error Downloading Image</Alert> : <LinearProgress style={{ minWidth: 400 }} />
             }
         </Modal>

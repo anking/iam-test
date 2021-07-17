@@ -1,8 +1,5 @@
-import Cookies from 'universal-cookie'
 import PCancelable from 'p-cancelable'
 import * as _ from 'lodash'
-import history from 'customHistory'
-import { Events } from 'common'
 import { v4 as guid } from 'uuid'
 import Cognito from 'authentication/cognito';
 
@@ -45,7 +42,7 @@ export default class Backend {
                 })
                     .then(response => {
                         //If 401-Unautorized was received, redirect to main page
-                        if (response.status === 401 && !history.location.pathname.includes('sign-in')) window.dispatchEvent(Events.zdLogout)
+                        //if (response.status === 401 && !history.location.pathname.includes('sign-in')) console.log('logout event'); //window.dispatchEvent(Events.zdLogout)
                         //if (response.status === 401 && !history.location.pathname.includes('/logout')) history.push('/logout')
 
                         //Update cookies that control automatic logout

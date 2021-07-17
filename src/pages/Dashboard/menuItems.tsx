@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,37 +9,13 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import { useNavigate } from 'react-router-dom';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Cognito from '../../authentication/cognito';
-import { Accordion, AccordionDetails, AccordionSummary, makeStyles, Tooltip } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FolderIcon from '@material-ui/icons/Folder';
-import Backend from '../../common/backend';
-import { UserBookmarks } from '../../common/types/bookmarks'
+import { Tooltip } from '@material-ui/core';
 import { DashboardContext, DashboardContextType } from '../../common/context/dashboardContext'
 
 
 interface listItemsProps {
     drawerOpen: boolean;
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'unset',
-        padding: 0
-    },
-    accordionRoot: {
-        boxShadow: 'unset',
-        margin: '0 !important',
-        '&:before': {
-            backgroundColor: 'unset'
-        }
-    },
-    accordionSummaryContent: {
-        margin: '0 !important'
-    },
-    accordionSummaryRoot: {
-        minHeight: 'unset !important'
-    }
-}));
 
 export const MainListItems = () => {
 
@@ -69,17 +45,9 @@ export const MainListItems = () => {
 export const SecondaryListItems = (props: listItemsProps) => {
     const { drawerOpen } = props;
 
-    const classes = useStyles();
-
     const navigate = useNavigate();
 
     const dContext = useContext<DashboardContextType>(DashboardContext);
-
-    useEffect(() => {
-        Backend.get<UserBookmarks>('dogs/GetBookmarks')
-            .then(res => dContext.setUserBookmarks(res))
-            .catch(console.log)
-    }, []);
 
     return <>
         { drawerOpen && <ListSubheader inset>Saved dogs</ListSubheader>}

@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import useImage from 'use-image';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import { DashboardContext, DashboardContextType } from '../../common/context/dashboardContext';
-
-import { Stage, Layer, Rect, Circle, Shape, Image } from 'react-konva';
-import Konva from 'konva';
+import { Stage, Layer, Circle, Image } from 'react-konva';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,8 +27,6 @@ interface KonvaProps {
 
 export const KonvaTest = (props: KonvaProps) => {
     const classes = useStyles();
-
-    const dContext = useContext<DashboardContextType>(DashboardContext);
 
     const LX = 195;
     const LY = 215;
