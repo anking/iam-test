@@ -127,17 +127,22 @@ const Dashboard = (props: DashboardProps) => {
     const [LSdrawerOpen, setLSDrawerOpen] = useLocalStorage('menuDrawerOpen', "1");
     const [drawerOpen, setDrawerOpen] = useState(LSdrawerOpen === '1');    
 
+    //local storage bookmarks
+    const [savedBookmarks, setSavedBookmarks] = useLocalStorage('bookmarks', undefined);
+    const [userBookmarks, setUserBookmarks] = useState<UserBookmarks>(savedBookmarks ? JSON.parse(savedBookmarks) : {bookmarks:[]});
+
     useEffect(() => {
         setDrawerOpen(LSdrawerOpen === '1')
     }, [LSdrawerOpen])
-
-    const [userBookmarks, setUserBookmarks] = useState<UserBookmarks>({bookmarks:[]});
+    
 
     //add dog bookmark
     const addBookmark = (bm: Bookmark) => {
         if (userBookmarks) {
             userBookmarks?.bookmarks.push(bm);
             setUserBookmarks({ ...userBookmarks, bookmarks: userBookmarks.bookmarks })
+
+            setSavedBookmarks(JSON.stringify(userBookmarks));
         }
     }
 

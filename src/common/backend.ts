@@ -100,7 +100,7 @@ export default class Backend {
                     CallParams.Reject('Async request was canceled');
                 });
             })
-            .catch(console.log);
+            .catch(CallParams.Reject);
     }
 
     static addCall<Type>(params: any, priorityCall = false) {

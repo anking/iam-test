@@ -53,7 +53,6 @@ export const Dogs = (props: DogsProps) => {
 
         return Backend.get<GetImageResponse>('images/' + imageId)
             .then(r => {
-                console.log(r)
                 if (r?.status === 400) {
                     setImageDocumentError(true)
                     setImage(null)
